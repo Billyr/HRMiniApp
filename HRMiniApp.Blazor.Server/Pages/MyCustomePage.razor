@@ -1,0 +1,18 @@
+﻿@page "/MyCustomPage"
+@using DevExpress.ExpressApp.Blazor
+
+<h3>🚀 My Custom Page</h3>
+<p>This is a native Blazor page integrated into XAF Blazor.</p>
+
+<button class="btn btn-primary" @onclick="ShowMessage">Click Me</button>
+
+<p>@message</p>
+
+@code {
+    private string message = "Waiting...";
+
+    private void ShowMessage()
+    {
+        message = "Hello from MyCustomPage!";
+    }
+}

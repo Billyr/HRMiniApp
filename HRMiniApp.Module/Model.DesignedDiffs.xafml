@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Application Title="HRMiniApp">
+  <BOModel>
+    <Class Name="HRMiniApp.Module.BusinessObjects.Employee">
+      <OwnMembers>
+        <Member Name="FirstName" Caption="Given Name" />
+        <Member Name="LastName" Caption="Family Name" />
+      </OwnMembers>
+    </Class>
+  </BOModel>
+  <NavigationItems>
+    <Items>
+      <Item Id="Reports">
+        <Items>
+          <Item Id="@a424a34b-24f8-41b2-9a82-c8a1e26b4498" ViewId="Employee_ListView" IsNewNode="True" />
+        </Items>
+      </Item>
+    </Items>
+  </NavigationItems>
+  <Options>
+    <LayoutManagerOptions RequiredFieldMark="*" />
+  </Options>
+  <SchemaModules>
+    <SchemaModule Name="SystemModule" Version="24.2.7.0" IsNewNode="True" />
+  </SchemaModules>
+  <Views>
+    <DetailView Id="Employee_DetailView">
+      <Items>
+        <PropertyEditor Id="Department" Index="0" />
+        <PropertyEditor Id="FirstName" Index="1" />
+        <PropertyEditor Id="IsManager" Index="2" />
+        <PropertyEditor Id="FullName" Index="3" />
+        <PropertyEditor Id="LastName" Index="4" />
+        <PropertyEditor Id="Oid" Index="5" />
+      </Items>
+      <Layout>
+        <LayoutGroup Id="Main">
+          <LayoutGroup Id="SimpleEditors">
+            <LayoutGroup Id="Employee">
+              <LayoutGroup Id="Employee_col1">
+                <LayoutItem Id="Department" Removed="True" />
+              </LayoutGroup>
+              <LayoutGroup Id="Employee_col2">
+                <LayoutItem Id="IsManager" Removed="True" />
+              </LayoutGroup>
+            </LayoutGroup>
+            <LayoutGroup Id="@a9431642-042d-4151-b4fd-710366f122f9" Caption="Area" ShowCaption="True" Direction="Horizontal" IsNewNode="True">
+              <LayoutItem Id="Department" ViewItem="Department" ShowCaption="" Index="0" IsNewNode="True" />
+              <LayoutItem Id="IsManager" ViewItem="IsManager" ShowCaption="" Index="1" IsNewNode="True" />
+            </LayoutGroup>
+          </LayoutGroup>
+        </LayoutGroup>
+      </Layout>
+    </DetailView>
+  </Views>
+</Application>

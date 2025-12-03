@@ -1,0 +1,48 @@
+﻿@page "/EmployeeOverview"
+@using HRMiniApp.Module.BusinessObjects
+@* @inject DevExpress.ExpressApp.Blazor.Services.XafApplicationProvider XafAppProvider *@
+
+@using DevExpress.ExpressApp
+@inject DevExpress.ExpressApp.IObjectSpaceFactory ObjectSpaceFactory
+
+<PageTitle>Employee Overview</PageTitle>
+
+<h3 class="mb-3">👨‍💼 Employee Overview</h3>
+
+@if (employees == null)
+{
+    <p>Loading employees...</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Full Name</th>
+                <th>Department</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var emp in employees)
+            {
+                <tr>
+                    <td>@emp.FullName</td>
+                    <td>@emp.Department.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Employee> employees;
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var objectSpace = ObjectSpaceFactory.CreateObjectSpace<Employee>();
+        employees = objectSpace.GetObjects<Employee>().ToList();
+        // // Resolve an IObjectSpace to query XPO/EF objects
+        // using var objectSpace = XafAppProvider.Application.CreateObjectSpace<Employee>();
+        // employees = objectSpace.GetObjects<Employee>().ToList();
+    }
+}
