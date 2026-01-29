@@ -23,7 +23,7 @@ namespace HRMiniApp.Module.BusinessObjects
         private DateTime? dueDate;
         private Employee employee;
 
-        [RuleRequiredField]
+        [RuleRequiredField(CustomMessageTemplate ="Falta capturar el nombre de la tarea.")]
         [Size(200)]
         public string Title
         {

@@ -1,0 +1,221 @@
+﻿@* @page "/employees/edit/{Oid:guid?}" *@
+@* @inject IObjectSpaceFactory ObjectSpaceFactory *@
+@inject NavigationManager Nav
+@inject IServiceProvider ServiceProvider
+@using DevExpress.Persistent.Validation;
+@inject DevExpress.Persistent.Validation.IValidator Validator
+
+@using DevExpress.ExpressApp;
+@using HRMiniApp.Module.BusinessObjects
+@using DevExpress.XtraPrinting.Native;
+
+
+@if (Employee == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <h3>@(IsNew ? "Create Employee" : "Edit Employee")</h3>
+
+    <input @bind="Employee.FirstName" placeholder="First Name" />
+    <input @bind="Employee.LastName" placeholder="Last Name" />
+
+    <select @bind="SelectedDepartmentOid">
+        <option value="">-- Select --</option>
+        @foreach (var d in Departments)
+        {
+            <option value="@d.Oid">@d.Name</option>
+        }
+    </select>
+
+    <input type="checkbox" @bind="Employee.IsManager"/>@:Manager
+
+    <br/>
+
+    <button @onclick = "Save">Save</button>
+
+    <button @onclick = "Cancel"> Cancel </button>
+}
+
+<hr />
+
+<h4>📝 Tasks</h4>
+
+<div class="tasks-container">
+    @foreach (var task in Employee.Tasks)
+    {
+        <div class="task-card">
+            <input class="chk" type="checkbox"
+            @bind="task.Priority"
+            />
+
+            <div class="task-main">
+                <input class="title"
+                @bind="task.Title"
+                placeholder="Task title" />
+
+                <select @bind="task.Priority">
+                    @foreach (var p in Enum.GetValues<Priority>())
+                    {
+                        <option value="@p">@p</option>
+                    }
+                </select>
+
+                <input type="date"
+                @bind="task.DueDate" />
+            </div>
+
+            <button class="delete"
+            @onclick="() => DeleteTask(task)">
+                ❌
+            </button>
+        </div>
+    }
+
+    <button class="add-task" @onclick="AddTask">
+        ➕ Add Task
+    </button>
+</div>
+
+
+@if (!string.IsNullOrEmpty(ErrorMessage))
+{
+    <div class="validation-error">
+        @((MarkupString)ErrorMessage)
+    </div>
+}
+
+
+
+
+
+
+
+
+@code {
+    //Employee Employee;
+    bool IsNew = true;
+    //IObjectSpace os;
+    IEnumerable<Department> Departments;
+    string ErrorMessage;
+    [Parameter] public Employee Employee { get; set; }
+    [Parameter] public IObjectSpace ObjectSpace { get; set; }
+
+
+
+    protected override void OnInitialized()
+    {
+        // os = ObjectSpaceFactory.CreateObjectSpace(typeof(Employee));
+
+        // if (Oid.HasValue)
+        // {
+        //     Employee = os.GetObjectByKey<Employee>(Oid.Value);
+        //     IsNew = false;
+        // }
+        // else
+        // {
+        //     Employee = os.CreateObject<Employee>();
+        //     IsNew = true;
+        // }
+
+        //Departments = os.GetObjects<Department>();
+
+        Departments = ObjectSpace.GetObjects<Department>();
+        
+    }
+
+
+    bool ValidateObjectGraph()
+    {
+
+        var ruleSet = DevExpress.Persistent.Validation.Validator.GetService(ServiceProvider);
+
+        var targets = new List<object>();
+        targets.Add(Employee);
+        targets.AddRange(Employee.Tasks.Cast<TaskItem>());
+
+        var result = ruleSet.ValidateAllTargets(
+            ObjectSpace,                  // Object space
+            targets,            // Root object to validate
+            ContextIdentifier.Save // Validation context
+        );
+
+        if (result != null && result.Results.Any())
+        {
+            ErrorMessage = string.Join(
+                "<br />",
+                result.Results.Where(r => r.State == ValidationState.Invalid)
+                              .Select(r => r.ErrorMessage).Distinct()
+            );
+            if (!string.IsNullOrEmpty(ErrorMessage))
+                return false;
+        }
+
+        return true;
+    }
+
+
+    async Task Save()
+    {
+        try
+        {
+            if (!ValidateObjectGraph())
+                return;
+
+            ObjectSpace.CommitChanges();
+            
+            Nav.NavigateTo("/Employee_ListView");
+        }
+        catch (ValidationException vex)
+        {
+            ErrorMessage = string.Join(
+                "<br />",
+                vex.Result.Results.Select(r => r.ErrorMessage)
+            );
+
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
+            StateHasChanged();
+        }
+    }
+
+
+    void Cancel()
+    {
+        ObjectSpace.Rollback();
+        Nav.NavigateTo("/Employee_ListView");
+    }
+
+    [Parameter] public Guid? Oid { get; set; }
+
+    Guid? SelectedDepartmentOid
+    {
+        get => Employee.Department?.Oid;
+        set
+        {
+            Employee.Department = value == null
+                ? null
+                : Departments.First(d => d.Oid == value);
+        }
+    }
+
+
+
+    TaskItem NewTask;
+
+    void AddTask()
+    {
+        NewTask = ObjectSpace.CreateObject<TaskItem>();
+        NewTask.Employee = Employee; // 🔥 REQUIRED (aggregation)
+    }
+
+    void DeleteTask(TaskItem task)
+    {
+        ObjectSpace.Delete(task);
+    }
+
+}

@@ -14,6 +14,8 @@ using DevExpress.Persistent.BaseImpl;
 using HRMiniApp.Blazor.Server.Editors.CustomList;
 using System.ComponentModel;
 
+
+
 namespace HRMiniApp.Blazor.Server;
 
 [ToolboxItemFilter("Xaf.Platform.Blazor")]
@@ -31,4 +33,30 @@ public sealed class HRMiniAppBlazorModule : ModuleBase {
 
     }
 
+    public override void AddGeneratorUpdaters(ModelNodesGeneratorUpdaters updaters)
+    {
+        base.AddGeneratorUpdaters(updaters);
+        //updaters.Add(new CustomViewItemModelUpdater());
+
+    }
+
 }
+
+
+
+//public class CustomViewItemModelUpdater : ModelNodesGeneratorUpdater<ModelViewsNodesGenerator>
+//{
+    //public override void UpdateNode(ModelNode node)
+    //{
+    //    var views = (IModelViews)node;
+
+    //    foreach (var view in views)
+    //    {
+    //        if (view is IModelDetailView detailView)
+    //        {
+    //            var customViewItem = detailView.Layout.AddNode<IModelViewItem>("CustomEmployeeDetail");
+    //            customViewItem.SetValue("ViewItemType", typeof(EmployeeDetailRazorViewItem));
+    //        }
+    //    }
+    //}
+//}

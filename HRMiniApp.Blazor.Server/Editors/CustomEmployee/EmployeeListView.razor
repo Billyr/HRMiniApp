@@ -1,0 +1,53 @@
+﻿@* EmployeeListView.razor *@
+@page "/employees"
+@inherits ComponentBase
+
+@using DevExpress.ExpressApp;
+@inject NavigationManager NavigationManager
+@inject IObjectSpaceFactory ObjectSpaceFactory
+
+@using HRMiniApp.Module.BusinessObjects
+
+@if (Data is not null)
+{
+    <table class="table">
+        <thead><tr><th>Name</th><th>Department</th><th>Manager?</th></tr></thead>
+        <tbody>
+            @foreach (var emp in Data)
+            {
+                <tr @onclick="() => ItemClick.InvokeAsync(emp)" style="cursor:pointer">
+@*                 <tr @onclick="() => OpenEmployee(emp)" style="cursor:pointer">
+ *@                    <td>@emp.FirstName</td>
+                    <td>@(emp.Department != null ? emp.Department.Name : "")</td>
+                    <td>@(emp.IsManager ? "Yes" : "No")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code 
+{
+    IObjectSpace os;
+    [Parameter] public IEnumerable<Employee> Data { get; set; }
+    [Parameter] public EventCallback<Employee> ItemClick { get; set; }
+
+    //[Parameter] public EmployeeListViewModel Model { get; set; }
+
+
+    async Task OpenEmployee(Employee employee)
+    {
+        NavigationManager.NavigateTo($"/employees/edit/{employee.Oid}");
+
+        // Optional: still notify XAF selection system
+        //if (Model.ItemClick.HasDelegate)
+        //await ItemClick.InvokeAsync(employee);
+    }
+
+        
+    protected override void OnInitialized()
+    {
+        //os = ObjectSpaceFactory.CreateObjectSpace<Employee>();
+        //Data = os.GetObjects<Employee>();
+    }
+}

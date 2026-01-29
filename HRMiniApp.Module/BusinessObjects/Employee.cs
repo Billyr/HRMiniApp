@@ -3,6 +3,7 @@ using DevExpress.Persistent.BaseImpl;
 using DevExpress.Xpo;
 using DevExpress.ExpressApp.ConditionalAppearance;
 using System.Drawing;
+using DevExpress.Persistent.Validation;
 
 namespace HRMiniApp.Module.BusinessObjects
 {
@@ -17,6 +18,7 @@ namespace HRMiniApp.Module.BusinessObjects
         private Department department;
         private bool isManager;
 
+        [RuleRequiredField]
         public string FirstName
         {
             get => firstName;
@@ -43,15 +45,15 @@ namespace HRMiniApp.Module.BusinessObjects
         }
 
 
-        [PersistentAlias("Concat(FirstName, ' ', LastName)")]
-        public string FullName
-        {
-            get
-            {
-                object tmp = EvaluateAlias(nameof(FullName));
-                return tmp?.ToString();
-            }
-        }
+        //[PersistentAlias("Concat(FirstName, ' ', LastName)")]
+        //public string FullName
+        //{
+        //    get
+        //    {
+        //        object tmp = EvaluateAlias(nameof(FullName));
+        //        return tmp?.ToString();
+        //    }
+        //}
 
         [Association("Employee-Tasks"), Aggregated]
         public XPCollection<TaskItem> Tasks => GetCollection<TaskItem>(nameof(Tasks));

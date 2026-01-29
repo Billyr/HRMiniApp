@@ -29,3 +29,60 @@ app {
     height: 100%;
     z-index: 100001;
 }
+
+
+
+
+.tasks-container {
+    margin-top: 1rem;
+}
+
+.task-card {
+    display: flex;
+    align-items: center;
+    background: #f9f9fb;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.task-main {
+    display: flex;
+    gap: 8px;
+    flex: 1;
+}
+
+.task-main .title {
+    flex: 2;
+}
+
+.task-main select,
+.task-main input {
+    padding: 4px;
+}
+
+.task-card .delete {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.add-task {
+    margin-top: 8px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px dashed #999;
+    background: white;
+    cursor: pointer;
+}
+
+.validation-error {
+    background-color: #fff4f4;
+    border: 1px solid #ff6b6b;
+    color: #a40000;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+}
