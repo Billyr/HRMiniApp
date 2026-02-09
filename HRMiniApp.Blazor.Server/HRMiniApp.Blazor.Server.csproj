@@ -38,7 +38,6 @@
     <ProjectReference Include="..\Shared\HRMiniApp.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Components\" />
     <Folder Include="ViewItem\" />
   </ItemGroup>
 </Project>

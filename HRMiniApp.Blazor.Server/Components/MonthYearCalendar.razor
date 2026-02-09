@@ -1,0 +1,29 @@
+﻿@using DevExpress.Blazor
+
+<DxDateEdit T="DateTime"
+            Date="@SelectedDate"
+            DateChanged="@OnDateChanged"
+            PickerDisplayMode="DatePickerDisplayMode.ScrollPicker"
+            CalendarVisible="true"
+            DisplayFormat="MMMM yyyy"
+            EditFormat="MMMM yyyy"
+            ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Never" />
+
+@code {
+    [Parameter] public DateTime? Value { get; set; }
+    [Parameter] public EventCallback<DateTime?> ValueChanged { get; set; }
+
+    DateTime SelectedDate;
+
+    protected override void OnParametersSet()
+    {
+        SelectedDate = Value ?? new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+    }
+
+    async Task OnDateChanged(DateTime newDate)
+    {
+        // Force month/year only
+        var result = new DateTime(newDate.Year, newDate.Month, 1);
+        await ValueChanged.InvokeAsync(result);
+    }
+}

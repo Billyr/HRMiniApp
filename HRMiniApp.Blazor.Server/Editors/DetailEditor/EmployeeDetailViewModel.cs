@@ -1,13 +1,17 @@
 ﻿using DevExpress.ExpressApp;
 using DevExpress.ExpressApp.Blazor.Components.Models;
-using HRMiniApp.Blazor.Server.Editors.DetailEditor;
+using HRMiniApp.Blazor.Server.Components;
 using HRMiniApp.Module.BusinessObjects;
 using Microsoft.AspNetCore.Components;
 using System;
 
 public class EmployeeDetailViewModel : ComponentModelBase
 {
-    //public View View { get; set; }
+    public View View
+    {
+        get => GetPropertyValue<View>();
+        set => SetPropertyValue(value);
+    }
 
     public Employee Employee
     {

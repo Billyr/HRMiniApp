@@ -37,7 +37,12 @@ namespace HRMiniApp.Module.BusinessObjects
             set => SetPropertyValue(nameof(Priority), ref priority, value);
         }
 
-        [ModelDefault("DisplayFormat", "dd/MM/yyyy")]
+        [ModelDefault("DisplayFormat", "MMMM yyyy")]
+        [ModelDefault("EditMask", "MMMM yyyy")]
+        [ModelDefault("AllowEdit", "True")]
+        [ModelDefault("PropertyEditorType", "MonthYearEditor")]
+        [ModelDefault("ImmediatePostData", "True")]
+        [RuleRequiredField]
         public DateTime? DueDate
         {
             get => dueDate;

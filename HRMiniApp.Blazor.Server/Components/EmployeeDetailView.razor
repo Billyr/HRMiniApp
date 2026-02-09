@@ -1,0 +1,33 @@
+﻿@using HRMiniApp.Module.BusinessObjects
+
+@if (Model?.Employee == null)
+{
+    <div class="text-danger">Model not initialized</div>
+}
+else
+{
+    <div class="card p-3">
+        <h3>Employee (Custom Detail)</h3>
+
+        <input class="form-control"
+               @bind="Model.Employee.FirstName" />
+
+        <input class="form-control mt-2"
+               @bind="Model.Employee.LastName" />
+
+        <button class="btn btn-primary mt-3"
+                @onclick="Model.SaveRequested">
+            Save
+        </button>
+
+        <button class="btn btn-secondary ms-2"
+                @onclick="Model.CancelRequested">
+            Cancel
+        </button>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public EmployeeDetailViewModel Model { get; set; } = default!;
+}

@@ -1,0 +1,92 @@
+﻿@using DevExpress.Blazor
+
+<DxTextBox Text="@DisplayText"
+           ReadOnly="true"
+           Click="OpenPopup"
+           CssClass="dx-editor-readonly" />
+
+<DxPopup @bind-Visible="PopupVisible"
+         Width="320px"
+         HeaderText="Seleccione mes y año"
+         ShowCloseButton="true"
+         CloseOnOutsideClick="true">
+
+    <BodyTemplate>
+        <div class="dx-flex dx-flex-column dx-gap-2">
+
+            <DxComboBox Data="@Months"
+                        TextFieldName="Text"
+                        ValueFieldName="Value"
+                        Value="@Month"
+                        ValueChanged="@((int v) => Month = v)" />
+
+            <DxComboBox Data="@Years"
+                        Value="@Year"
+                        ValueChanged="@((int v) => Year = v)" />
+
+        </div>
+    </BodyTemplate>
+
+    <FooterTemplate>
+        <DxButton Text="Cancelar"
+                  Click="ClosePopup"
+                  RenderStyle="ButtonRenderStyle.Secondary" />
+
+        <DxButton Text="Aceptar"
+                  Click="Confirm"
+                  RenderStyle="ButtonRenderStyle.Primary" />
+    </FooterTemplate>
+
+</DxPopup>
+
+@code {
+    [Parameter] public DateTime? Value { get; set; }
+    [Parameter] public EventCallback<DateTime?> ValueChanged { get; set; }
+    [Parameter] public bool IsReadOnly { get; set; }
+    [Parameter] public string ErrorMessage { get; set; }
+
+    bool PopupVisible;
+    int Month;
+    int Year;
+
+    string DisplayText =>
+        Value?.ToString("MMMM yyyy") ?? "Seleccione el periodo";
+
+    protected override void OnParametersSet()
+    {
+        var date = Value ?? DateTime.Today;
+        Month = date.Month;
+        Year = date.Year;
+    }
+
+    void OpenPopup() => PopupVisible = true;
+    void ClosePopup() => PopupVisible = false;
+
+    async Task Confirm()
+    {
+        var result = new DateTime(Year, Month, 1, 0, 0, 0, DateTimeKind.Unspecified);
+        PopupVisible = false;
+        await ValueChanged.InvokeAsync(result);
+    }
+
+    IEnumerable<MonthItem> Months => new[]
+    {
+        new MonthItem(1,"Enero"),
+        new MonthItem(2,"Febrero"),
+        new MonthItem(3,"Marzo"),
+        new MonthItem(4,"Abril"),
+        new MonthItem(5,"Mayo"),
+        new MonthItem(6,"Junio"),
+        new MonthItem(7,"Julio"),
+        new MonthItem(8,"Agosto"),
+        new MonthItem(9,"Septiembre"),
+        new MonthItem(10,"Octubre"),
+        new MonthItem(11,"Noviembre"),
+        new MonthItem(12,"Diciembre")
+    };
+
+    IEnumerable<int> Years =>
+        Enumerable.Range(DateTime.Today.Year - 10, 21);
+
+    record MonthItem(int Value, string Text);
+}

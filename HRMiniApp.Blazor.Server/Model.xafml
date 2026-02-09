@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Application>
+  <BOModel>
+    <Class Name="HRMiniApp.Module.BusinessObjects.Employee" DefaultDetailView="Employee_DetailView" />
+  </BOModel>
   <NavigationItems NavigationStyle="Accordion" />
   <Options UIType="TabbedMDI" RestoreTabbedMdiLayout="True" ShowTabImage="True" />
   <SchemaModules>
@@ -7,11 +10,17 @@
   </SchemaModules>
   <Views>
     <DetailView Id="Employee_Custom_DetailView" ClassName="HRMiniApp.Module.BusinessObjects.Employee" IsNewNode="True">
+      <Items IsNewNode="True">
+        <ControlDetailItem Id="EmployeeDetailRazorViewItem" ControlTypeName="EmployeeDetailRazorViewItem" IsNewNode="True" />
+      </Items>
       <Layout IsNewNode="True">
-        <LayoutGroup Id="MainGroup" ShowCaption="True" IsNewNode="True">
-          <LayoutItem Id="CustomEmployeeDetail" IsNewNode="True" />
-        </LayoutGroup>
+        <LayoutItem Id="EmployeeCustomDetail" ViewItem="EmployeeDetailRazorViewItem" IsNewNode="True" />
       </Layout>
+    </DetailView>
+    <DetailView Id="TaskItem_DetailView">
+      <Items>
+        <PropertyEditor Id="DueDate" PropertyEditorType="BusinessSuite.Xaf.Blazor.Server.Editors.MonthYearPropertyEditor" />
+      </Items>
     </DetailView>
   </Views>
 </Application>

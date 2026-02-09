@@ -86,3 +86,19 @@ app {
     border-radius: 6px;
     margin-bottom: 12px;
 }
+
+
+/* Hide day grid */
+.dxbl-calendar-table {
+    display: none;
+}
+
+/* Make month/year view visible */
+.dxbl-calendar-header {
+    display: block;
+}
+
+/* Hide "Today" button */
+.dxbl-calendar-footer {
+    display: none;
+}

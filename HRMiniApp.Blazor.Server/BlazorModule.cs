@@ -1,4 +1,5 @@
 ﻿
+using BusinessSuite.Xaf.Blazor.Server.Editors;
 using DevExpress.ExpressApp;
 using DevExpress.ExpressApp.Actions;
 using DevExpress.ExpressApp.DC;
@@ -24,12 +25,19 @@ public sealed class HRMiniAppBlazorModule : ModuleBase {
     public HRMiniAppBlazorModule() 
     {
         DataAccessModeHelper.RegisterEditorSupportedModes(typeof(BlazorCustomListEditor), [CollectionSourceDataAccessMode.Client]);
+        
+        //RequiredModuleTypes.Add(typeof(DevExpress.ExpressApp.Blazor.SystemModule.SystemBlazorModule));
     }
     public override IEnumerable<ModuleUpdater> GetModuleUpdaters(IObjectSpace objectSpace, Version versionFromDB) {
         return ModuleUpdater.EmptyModuleUpdaters;
     }
     public override void Setup(XafApplication application) {
         base.Setup(application);
+
+        //application.EditorFactory. RegisterViewItem(
+        //    typeof(IModelViewItem),
+        //    typeof(EmployeeDetailRazorViewItem),
+        //    true);
 
     }
 
@@ -44,19 +52,20 @@ public sealed class HRMiniAppBlazorModule : ModuleBase {
 
 
 
+
 //public class CustomViewItemModelUpdater : ModelNodesGeneratorUpdater<ModelViewsNodesGenerator>
 //{
-    //public override void UpdateNode(ModelNode node)
-    //{
-    //    var views = (IModelViews)node;
+//public override void UpdateNode(ModelNode node)
+//{
+//    var views = (IModelViews)node;
 
-    //    foreach (var view in views)
-    //    {
-    //        if (view is IModelDetailView detailView)
-    //        {
-    //            var customViewItem = detailView.Layout.AddNode<IModelViewItem>("CustomEmployeeDetail");
-    //            customViewItem.SetValue("ViewItemType", typeof(EmployeeDetailRazorViewItem));
-    //        }
-    //    }
-    //}
+//    foreach (var view in views)
+//    {
+//        if (view is IModelDetailView detailView)
+//        {
+//            var customViewItem = detailView.Layout.AddNode<IModelViewItem>("CustomEmployeeDetail");
+//            customViewItem.SetValue("ViewItemType", typeof(EmployeeDetailRazorViewItem));
+//        }
+//    }
+//}
 //}
