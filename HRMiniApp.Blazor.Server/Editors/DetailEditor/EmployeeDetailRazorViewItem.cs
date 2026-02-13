@@ -11,7 +11,7 @@ using System.Threading.Channels;
 using HRMiniApp.Blazor.Server.Components;
 
 
-[ViewItem(typeof(IModelViewItem))]
+//[ViewItem(typeof(IModelViewItem))]
 public class EmployeeDetailRazorViewItem(Type objectType, IModelViewItem model) 
     : ViewItem(objectType, model.Id) , IComponentContentHolder
 {

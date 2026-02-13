@@ -1,0 +1,155 @@
+﻿@using DevExpress.Blazor
+@using HRMiniApp.Module.BusinessObjects
+@using DevExpress.XtraPrinting.Native
+
+<div class="p-4">
+
+    <DxTabs ActiveTabIndex="ComponentModel.CurrentStep"
+    ActiveTabIndexChanged="@(i => ComponentModel.CurrentStep = i)">
+
+        <!-- STEP 1 -->
+        <DxTabPage Text="Title">
+            <div class="mt-3">
+                <DxTextBox Text="@(ComponentModel.TaskItem.Title)"
+                TextChanged="@(v => ComponentModel.TaskItem.Title = v)"
+                NullText="Enter task title..." />
+            </div>
+        </DxTabPage>
+
+        <!-- STEP 2 -->
+        <DxTabPage Text="Priority">
+            <div class="mt-3">
+                <DxComboBox TData="Priority"
+                TValue="Priority"
+                Data="@Priorities"
+                Value="ComponentModel.TaskItem.Priority"
+                ValueChanged="@((Priority v) => ComponentModel.TaskItem.Priority = v )" />
+            </div>
+        </DxTabPage>
+
+        <!-- STEP 3 -->
+        <DxTabPage Text="Due Date">
+            <div class="mt-3">
+                <DxDateEdit Date="(DateTime)ComponentModel.TaskItem.DueDate"
+                DateChanged="@((DateTime v) => ComponentModel.TaskItem.DueDate = v)"
+                PickerDisplayMode="DatePickerDisplayMode.ScrollPicker"
+                DisplayFormat="MMMM yyyy" />
+            </div>
+        </DxTabPage>
+
+        <!-- STEP 4 -->
+        <DxTabPage Text="Employee">
+            <div class="mt-3">
+                <DxComboBox TData="Employee"
+                TValue="Guid?"
+                Data="@Employees"
+                TextFieldName="LastName"
+                ValueFieldName="Oid"
+                Value="SelectedEmployeeOid"
+                ValueChanged="@( (Guid? v) => OnEmployeeChanged(v) )" />
+
+            </div>
+        </DxTabPage>
+
+    </DxTabs>
+
+    <!-- NAVIGATION -->
+    <div class="d-flex justify-content-between mt-4">
+
+        <DxButton Text="Back"
+        Click="GoBack"
+        Enabled="@(ComponentModel.CurrentStep > 0)" />
+
+        @if (ComponentModel.CurrentStep < 3)
+        {
+            <DxButton Text="Next"
+            RenderStyle="ButtonRenderStyle.Primary"
+            Click="GoNext" />
+        }
+        else
+        {
+            <DxButton Text="Save"
+            RenderStyle="ButtonRenderStyle.Success"
+            Click="Save" />
+        }
+
+    </div>
+
+</div>
+
+@code {
+
+    [Parameter]
+    public TaskItemWizardComponentModel ComponentModel { get; set; }
+
+    public static RenderFragment Create(TaskItemWizardComponentModel componentModel) => 
+        @<TaskItemWizard ComponentModel="@componentModel" />;
+
+    //private TaskItem TaskItem => ComponentModel.TaskItem;
+
+    //private void OnTitleChanged(string title) => ComponentModel.SetTitleFromUI(title);
+
+    #region Data
+
+    private IEnumerable<Employee> Employees =>
+        ComponentModel.ObjectSpace.GetObjects<Employee>();
+
+    private IEnumerable<Priority> Priorities =>
+        Enum.GetValues(typeof(Priority)).Cast<Priority>();
+
+    #endregion
+
+    #region Navigation
+
+    private void GoNext()
+    {
+        if (ComponentModel.CurrentStep < 3)
+            ComponentModel.NextStep();
+    }
+
+    private void GoBack()
+    {
+        if (ComponentModel.CurrentStep > 0)
+            //ComponentModel.CurrentStep--;
+            ComponentModel.PreviousStep();
+    }
+
+    #endregion
+
+    #region Employee Binding
+
+    private Guid? SelectedEmployeeOid => ComponentModel.TaskItem.Employee?.Oid;
+
+    private void OnEmployeeChanged(object value)
+    {
+        if (value == null)
+        {
+            ComponentModel.TaskItem.Employee = null;
+            return;
+        }
+
+        var employee = ComponentModel.ObjectSpace
+            .GetObjectByKey<Employee>((Guid)value);
+
+        ComponentModel.TaskItem.Employee = employee;
+    }
+
+    #endregion
+
+    #region Save
+
+    private void Save()
+    {
+        try
+        {
+            ComponentModel.Save();
+        }
+        catch
+        {
+            // XAF validation will throw here
+            throw;
+        }
+    }
+
+    #endregion
+}

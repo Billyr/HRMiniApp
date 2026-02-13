@@ -12,6 +12,7 @@ using DevExpress.ExpressApp.SystemModule;
 using DevExpress.ExpressApp.Updating;
 using DevExpress.ExpressApp.Utils;
 using DevExpress.Persistent.BaseImpl;
+using HRMiniApp.Blazor.Server.Components.TaskItemWizard;
 using HRMiniApp.Blazor.Server.Editors.CustomList;
 using System.ComponentModel;
 
@@ -34,9 +35,9 @@ public sealed class HRMiniAppBlazorModule : ModuleBase {
     public override void Setup(XafApplication application) {
         base.Setup(application);
 
-        //application.EditorFactory. RegisterViewItem(
+        //application.EditorFactory.RegisterViewItem(
         //    typeof(IModelViewItem),
-        //    typeof(EmployeeDetailRazorViewItem),
+        //    typeof(TaskItemWizardViewItem),
         //    true);
 
     }

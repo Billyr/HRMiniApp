@@ -17,10 +17,21 @@
         <LayoutItem Id="EmployeeCustomDetail" ViewItem="EmployeeDetailRazorViewItem" IsNewNode="True" />
       </Layout>
     </DetailView>
+    <DetailView Id="TaskItem_Custom_DetailView" ClassName="HRMiniApp.Module.BusinessObjects.TaskItem" IsNewNode="True">
+      <Items IsNewNode="True">
+        <TaskItemViewItem Id="TaskItemViewItem" IsNewNode="True" />
+      </Items>
+      <Layout IsNewNode="True">
+        <LayoutGroup Id="Group" ShowCaption="True" IsNewNode="True">
+          <LayoutItem Id="TaskItemViewItemCustom" ViewItem="TaskItemViewItem" IsNewNode="True" />
+        </LayoutGroup>
+      </Layout>
+    </DetailView>
     <DetailView Id="TaskItem_DetailView">
       <Items>
-        <PropertyEditor Id="DueDate" PropertyEditorType="BusinessSuite.Xaf.Blazor.Server.Editors.MonthYearPropertyEditor" />
+        <PropertyEditor Id="DueDate" PropertyEditorType="BusinessSuite.Xaf.Blazor.Server.Editors.MonthYearPropertyEditor" LookupEditorMode="AllItemsWithSearch" />
       </Items>
     </DetailView>
+    <ListView Id="TaskItem_ListView" DetailViewID="TaskItem_Custom_DetailView" />
   </Views>
 </Application>
